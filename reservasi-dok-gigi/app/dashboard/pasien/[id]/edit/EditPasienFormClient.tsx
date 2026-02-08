@@ -13,12 +13,10 @@ type Props = {
 
 export default function EditPasienFormClient({
   id,
-  token,
   initialNama,
   initialNohp,
 }: Props) {
   const router = useRouter();
-  const backend = process.env.BACKEND_URL;
 
   const [namaPasien, setNamaPasien] = useState(initialNama);
   const [nohp, setNohp] = useState(initialNohp);
@@ -40,12 +38,9 @@ export default function EditPasienFormClient({
 
     setLoading(true);
     try {
-      const res = await fetch(`${backend}/pasiens/${id}`, {
+      const res = await fetch(`/api/pasiens/${id}`, {
         method: "PUT",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ namaPasien: nama, nohp: hp }),
       });
 

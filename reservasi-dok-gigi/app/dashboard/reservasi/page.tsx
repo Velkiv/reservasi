@@ -1,3 +1,4 @@
+import DeleteReservasiButton from "@/components/deleteReservasiButton";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -41,7 +42,6 @@ export default async function ReservasiPage() {
   }
 
   const reservasi = await data.json()
-
 
   return (
     <section className="space-y-4">
@@ -88,25 +88,32 @@ export default async function ReservasiPage() {
             <tbody className="text-sm text-slate-200">
               {reservasi.map((r: ReservasiRow) => (
                 <tr key={r.id} className="hover:bg-white/5">
-                  <td className="border-b border-white/10 px-4 py-3">{r.id}</td>
-                  <td className="border-b border-white/10 px-4 py-3">{r.pasien?.namaPasien}</td>
-                  <td className="border-b border-white/10 px-4 py-3">{formatDate(r.start_at)}</td>
-                  <td className="border-b border-white/10 px-4 py-3">{formatDate(r.finish_at)}</td>
-                  <td className="border-b border-white/10 px-4 py-3">{r.description}</td>
-                  <td className="border-b border-white/10 px-4 py-3">{r.status}</td>
-                  <td className="border-b border-white/10 px-4 py-3">{formatDate(r.createdAt)}</td>
+                  <td className={`border-b border-white/10 px-4 py-3 align-top whitespace-nowrap"`}>{r.id}</td>
+                  <td className={`border-b border-white/10 px-4 py-3 align-top`}>{r.pasien?.namaPasien ?? "-"}</td>
 
-                  <td className="border-b border-white/10 px-4 py-3">
-                    <div className="ml-auto flex flex-wrap justify-end gap-2">
-                      <button className="h-9 w-20 rounded-xl border border-white/10 bg-white/5 text-sm">
+                  {/* Biar tidak pecah baris sembarangan */}
+                  <td className={`border-b border-white/10 px-4 py-3 align-top whitespace-nowrap" tabular-nums`}>{formatDate(r.start_at)}</td>
+                  <td className={`border-b border-white/10 px-4 py-3 align-top whitespace-nowrap" tabular-nums`}>{formatDate(r.finish_at)}</td>
+
+                  <td className={`border-b border-white/10 px-4 py-3 align-top whitespace-nowrap"`}>{r.status}</td>
+                  <td className={`border-b border-white/10 px-4 py-3 align-top`}>
+                    <span className="line-clamp-2 text-slate-200/90">
+                      {r.description ?? "-"}
+                    </span>
+                  </td>
+
+                  <td className={`border-b border-white/10 px-4 py-3 align-top whitespace-nowrap" tabular-nums`}>{formatDate(r.createdAt)}</td>
+
+                  <td className={`border-b border-white/10 px-4 py-3 align-top`}>
+                    {/* jangan flex-wrap supaya tombol selalu 1 baris */}
+                    <div className="flex items-center justify-end gap-2">
+                      <Link href={`/dashboard/reservasi/${r.id}`} className={`inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white/90 transition hover:bg-white/10 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20`}>
                         Detail
-                      </button>
-                      <button className="h-9 w-20 rounded-xl border border-white/10 bg-white/5 text-sm">
+                      </Link>
+                      <Link href={`/dashboard/reservasi/${r.id}/edit`} className={`inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white/90 transition hover:bg-white/10 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20`}>
                         Edit
-                      </button>
-                      <button className="h-9 w-20 rounded-xl border border-white/10 bg-white/5 text-sm">
-                        Hapus
-                      </button>
+                      </Link>
+                      <DeleteReservasiButton id={r.id}/>
                     </div>
                   </td>
                 </tr>

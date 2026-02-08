@@ -24,7 +24,6 @@ function toISOFromDatetimeLocal(value: string) {
 
 export default function ReservasiFormClient({ token }: Props) {
   const router = useRouter();
-  const backend = process.env.BACKEND_URL;
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,10 +48,6 @@ export default function ReservasiFormClient({ token }: Props) {
   );
 
   useEffect(() => {
-    if (!backend) {
-      setPasiensError('BACKEND_URL belum diset.');
-      return;
-    }
 
     let cancelled = false;
 
@@ -61,12 +56,9 @@ export default function ReservasiFormClient({ token }: Props) {
       setPasiensError(null);
 
       try {
-        const res = await fetch(`${backend}/pasiens`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            ...authHeaders,
-          },
+        const res = await fetch("/api/pasiens", {
+          method: "GET",
+          cache: "no-store",
         });
 
         if (!res.ok) {
@@ -99,16 +91,11 @@ export default function ReservasiFormClient({ token }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [backend, authHeaders]);
+  }, [authHeaders]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-
-    if (!backend) {
-      setError('BACKEND_URL belum diset.');
-      return;
-    }
 
     const pasienIdNum = Number(pasienId);
     if (!Number.isFinite(pasienIdNum) || pasienIdNum <= 0) {
@@ -131,22 +118,21 @@ export default function ReservasiFormClient({ token }: Props) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${backend}/reservasis`, {
-        // GANTI ke `${backend}/reservasi` kalau route backend kamu singular
-        method: 'POST',
-        credentials: 'include',
+      const res = await fetch("/api/reservasi", {
+        method: "POST",
         headers: {
-          'content-type': 'application/json',
-          ...authHeaders,
+          "content-type": "application/json",
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           pasienId: pasienIdNum,
           start_at: startISO,
           finish_at: finishISO,
           description: description.trim() || null,
-          status, // "Booked" | "Finished" | "Cancelled"
+          status,
         }),
       });
+
 
       if (res.ok) {
         router.push('/dashboard/reservasi');

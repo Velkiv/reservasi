@@ -93,10 +93,10 @@ export default async function PasienPage() {
                     </td>
                     <td className="border-b border-white/10 px-4 py-3">
                       <div className="ml-auto flex justify-end gap-2">
-                        <Link href={`/dashboard/pasien/${pasien.id}`} className="text-center h-9 w-20 rounded-xl border border-white/10 bg-white/5 text-sm">
+                        <Link href={`/dashboard/pasien/${pasien.id}`} className="inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white/90 transition hover:bg-white/10 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20">
                           Detail
                         </Link>
-                        <Link href={`/dashboard/pasien/${pasien.id}/edit`} className="h-9 w-20 rounded-xl border border-white/10 bg-white/5 text-sm">
+                        <Link href={`/dashboard/pasien/${pasien.id}/edit`} className="inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white/90 transition hover:bg-white/10 hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20">
                           Edit
                         </Link>
                         <DeletePasienButton id={pasien.id}/>

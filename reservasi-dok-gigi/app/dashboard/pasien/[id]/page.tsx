@@ -74,16 +74,17 @@ export default async function PasienDetailPage({
 }) {
   const cookie = (await cookies()).get("access-token");
   if (!cookie?.value) redirect("/login");
+  const backend = process.env.BACKEND_URL;
 
   const { id } = await params;
   const pasienId = Number(id);
   if (!Number.isFinite(pasienId)) notFound();
 
-  const res = await fetch(`/api/pasiens/${pasienId}`, {
+  const res = await fetch(`${backend}/pasiens/${pasienId}`, {
     cache: "no-store",
-    // headers: {
-    //   Authorization: `Bearer ${cookie.value}`,
-    // },
+    headers: {
+      Authorization: `Bearer ${cookie.value}`,
+    },
   });
 
   if (res.status === 401) redirect("/login");

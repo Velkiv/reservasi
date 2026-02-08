@@ -11,7 +11,6 @@ export default function PasienFormClient({ token }: Props) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const backend = process.env.BACKEND_URL;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -28,14 +27,10 @@ export default function PasienFormClient({ token }: Props) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${backend}/pasiens`, {
-        method: 'POST',
-        credentials: 'include', // tetap boleh untuk cookie-based session
-        headers: {
-          'content-type': 'application/json',
-          // ...(token ? { authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ namaPasien, nohp }), // sesuaikan field backend (namaPasien)
+      const res = await fetch(`/api/pasiens`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ namaPasien, nohp }),
       });
 
       if (res.ok) {

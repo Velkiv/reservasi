@@ -8,7 +8,7 @@ type Props = {
   id: number;
 };
 
-export default function DeletePasienButton({ id }: Props) {
+export default function DeleteReservasiButton({ id }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +18,7 @@ export default function DeletePasienButton({ id }: Props) {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/pasiens/${id}`, {
+      const res = await fetch(`/api/reservasi/${id}`, {
         method: "DELETE",
         credentials: "include"
       });
